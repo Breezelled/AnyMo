@@ -18,7 +18,7 @@ from collections import Counter, OrderedDict
 
 DEFAULT_NYMERIA_ROOT = Path(os.environ.get("ANYMO_DATA_ROOT", "<PATH_TO_NYMERIA>"))
 DEFAULT_EXCLUDED_LABELS = ("writing with foot", "sit-ups")
-ATOMIC_LABEL_CSV = "multimodal_sync_60hz/atomic_action_60hz_activity_labels_filtered.csv"
+ATOMIC_LABEL_CSV = "<PATH_TO_ANYMO_ACTIVITY_ANNOTATIONS>"
 ATOMIC_TIME_CSV = "multimodal_sync_60hz/atomic_action_60hz.csv"
 BENCHMARK_LABEL_COLUMNS = {
     "fine150": "activity_label",

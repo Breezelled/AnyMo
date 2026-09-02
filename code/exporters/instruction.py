@@ -378,7 +378,7 @@ def resolve_output_dir(args: argparse.Namespace) -> Path:
 
 def build_instruction_window_specs(
     records: list[token_export.data.SampleRecord],
-    activity_label_filename: str = token_export.DEFAULT_FILTERED_ACTIVITY_LABEL_FILENAME,
+    activity_label_filename: str = token_export.DEFAULT_ACTIVITY_LABEL_FILENAME,
     limit_windows: int | None = None,
 ) -> list[InstructionWindowSpec]:
     specs: list[InstructionWindowSpec] = []

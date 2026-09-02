@@ -24,7 +24,7 @@ import training_utils as utils
 DEFAULT_TOKENIZER_EXPORT = config.TOKENIZER_OUTPUT_DIR / "tokenizer_export.pt"
 DEFAULT_OUTPUT_DIR = config.MOTION_LANGUAGE_DATA_DIR
 DEFAULT_TEXT_ALIGNED_OUTPUT_DIR = config.MOTION_LANGUAGE_DATA_DIR
-DEFAULT_FILTERED_ACTIVITY_LABEL_FILENAME = "atomic_action_60hz_activity_labels_filtered.csv"
+DEFAULT_ACTIVITY_LABEL_FILENAME = "<ANYMO_ACTIVITY_LABEL_FILENAME>"
 
 
 @dataclass(frozen=True)
@@ -60,7 +60,7 @@ def build_argparser() -> argparse.ArgumentParser:
     parser.add_argument("--split-cache", type=Path, default=None)
     parser.add_argument("--train-ratio", type=float, default=0.9)
     parser.add_argument("--alignment-mode", type=str, choices=("fixed300", "text_labels"), default="text_labels")
-    parser.add_argument("--activity-label-filename", type=str, default=DEFAULT_FILTERED_ACTIVITY_LABEL_FILENAME)
+    parser.add_argument("--activity-label-filename", type=str, default=DEFAULT_ACTIVITY_LABEL_FILENAME)
     parser.add_argument("--batch-size", type=int, default=256)
     parser.add_argument("--num-workers", type=int, default=0)
     parser.add_argument("--seed", type=int, default=42)
@@ -206,7 +206,7 @@ def remap_text_indices_to_synth_time_axis(
 
 def build_text_label_window_specs(
     records: list[data.SampleRecord],
-    activity_label_filename: str = DEFAULT_FILTERED_ACTIVITY_LABEL_FILENAME,
+    activity_label_filename: str = DEFAULT_ACTIVITY_LABEL_FILENAME,
 ) -> list[ExportWindowSpec]:
     specs: list[ExportWindowSpec] = []
     order_index = 0

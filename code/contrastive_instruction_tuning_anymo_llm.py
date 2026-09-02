@@ -93,7 +93,7 @@ def build_argparser() -> argparse.ArgumentParser:
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--contrastive-batch-size", type=int, default=None)
     parser.add_argument("--gradient-accumulation-steps", type=int, default=1)
-    parser.add_argument("--max-length", type=int, default=1024)
+    parser.add_argument("--max-length", type=int, default=4096)
     parser.add_argument("--max-imu-length", type=int, default=2048)
     parser.add_argument("--max-text-length", type=int, default=256)
     parser.add_argument("--lm-loss-weight", type=float, default=1.0)
@@ -116,7 +116,7 @@ def build_argparser() -> argparse.ArgumentParser:
             "Effective local contrastive batch = contrastive_batch_size * grad_cache_steps."
         ),
     )
-    parser.add_argument("--temperature", type=float, default=0.1)
+    parser.add_argument("--temperature", type=float, default=0.05)
     parser.add_argument("--pooler-latents", type=int, default=128)
     parser.add_argument("--embedding-dim", type=int, default=None)
     parser.add_argument(

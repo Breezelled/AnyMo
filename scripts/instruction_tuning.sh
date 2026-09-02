@@ -17,8 +17,8 @@ fi
   --codebook-artifact "${ANYMO_OUTPUT_ROOT}/instruction_tuning/imu_codebook_lookup.pt" \
   --output-dir "${ANYMO_OUTPUT_ROOT}/anymo" \
   --epochs 1 --learning-rate 2e-5 --batch-size 16 --contrastive-batch-size 16 \
-  --gradient-accumulation-steps 4 --grad-cache-steps 4 --max-length 1024 \
+  --gradient-accumulation-steps 4 --grad-cache-steps 4 --max-length 4096 \
   --pooler-latents 128 --lm-loss-weight 1 --contrastive-loss-weight 2 \
-  --label-contrastive-loss-weight 2 --temperature 0.1 --text-soft-prompt-length 8 \
+  --label-contrastive-loss-weight 2 --temperature 0.05 --text-soft-prompt-length 8 \
   --imu-residual-scale 0.5 --torch-dtype bfloat16 --attn-impl flash_attention_2 \
   --dataloader-num-workers 4 --no-pretokenize --seed 42

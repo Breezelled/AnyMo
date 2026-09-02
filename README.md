@@ -14,7 +14,6 @@
 [![Paper](https://img.shields.io/badge/arXiv-2605.22715-b31b1b.svg)](https://arxiv.org/abs/2605.22715)
 [![Project Page](https://img.shields.io/badge/Project-Page-4c8bf5.svg)](https://baiyuchen.com/project/AnyMo)
 [![AnyMo Bench](https://img.shields.io/badge/%F0%9F%A4%97-AnyMo--Bench-yellow.svg)](https://huggingface.co/datasets/CRUISEResearchGroup/AnyMo-Bench)
-[![Code](https://img.shields.io/badge/GitHub-Code-181717?logo=github)](https://github.com/Breezelled/AnyMo)
 [![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3100/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.10.0-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org/)
 
@@ -195,6 +194,8 @@ bash scripts/prepare_nymeria.sh
 ### 2. 🧭 Geometry-Aware IMU Simulation
 
 This stage selects candidate vertices for 23 anatomical segments, constructs tangent/binormal/normal local sensor frames, simulates signals using the bundled WIMUSim implementation, and stores the generated arrays in the training format. The initial candidate-selection command uses the official Nymeria body-motion provider; the remaining simulation commands use the prepared mesh arrays and bundled WIMUSim:
+
+The complete dense synthetic dataset covers 831 Nymeria recordings and all 2,374 candidate body-surface placements, occupying approximately 2.1 TB in Zarr format. Due to its size, the precomputed synthetic arrays are not hosted in this repository and should be generated locally using the provided pipeline.
 
 ```bash
 bash scripts/simulate_imu.sh
