@@ -40,23 +40,23 @@ AnyMo models wearable setup variation through body geometry. It simulates IMUs o
 ## 🌟 Overview
 
 <p align="center">
-  <strong>Geometry-aware simulation</strong><br/>
-  <img src="assets/simulation.png" alt="Geometry-aware simulation" width="100%">
+  <img src="assets/simulation.png" alt="Physics-grounded geometry-aware motion simulation" width="45%"><br/>
+  <em>Physics-grounded geometry-aware motion simulation.</em>
 </p>
 
 <p align="center">
-  <strong>Sparse-to-full pretraining</strong><br/>
-  <img src="assets/pretraining.png" alt="Sparse-to-full pretraining" width="100%">
+  <img src="assets/pretraining.png" alt="Geometry-aware pre-training, full-body IMU tokenization, and motion language model pre-training" width="100%"><br/>
+  <em>Geometry-aware pre-training, full-body IMU tokenization, and motion language model pre-training.</em>
 </p>
 
 <p align="center">
-  <strong>Full-body tokenization</strong><br/>
-  <img src="assets/tokenization-pretraining-detail.png" alt="Full-body tokenization" width="100%">
+  <img src="assets/tokenization-pretraining-detail.png" alt="Masked IMU tokenization and motion language model pre-training" width="100%"><br/>
+  <em>Masked IMU tokenization and motion language model pre-training.</em>
 </p>
 
 <p align="center">
-  <strong>Motion-language tuning</strong><br/>
-  <img src="assets/cit-inference.png" alt="Motion-language tuning" width="100%">
+  <img src="assets/cit-inference.png" alt="Contrastive instruction tuning and AnyMo inference" width="100%"><br/>
+  <em>Contrastive instruction tuning (left) and inference phases (right) of AnyMo.</em>
 </p>
 
 The public pipeline follows the paper's four stages:
