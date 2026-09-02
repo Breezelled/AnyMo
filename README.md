@@ -80,6 +80,7 @@ AnyMo/
 │   ├── WIMUSim/              WIMUSim used by the geometry-aware simulator
 │   └── ms-swift/             ms-swift used for motion-language training
 ├── metadata/
+├── annotations/              Nymeria-aligned AnyMo training annotations
 ├── scripts/
 └── assets/
 ```
@@ -115,7 +116,13 @@ conda activate anymo-sim
 
 Pass an optional second argument to choose another environment name, for example `bash scripts/setup_environment.sh model my-anymo-env`.
 
-Nymeria preprocessing additionally requires the [official Nymeria tools](https://github.com/facebookresearch/nymeria_dataset) and their dependencies, including Project Aria Tools. Clone/install that repository following its documentation, then point `NYMERIA_TOOLS_ROOT` to the repository directory whose immediate child is the `nymeria/` Python package:
+AnyMo uses the original Nymeria sequence layout and APIs from the official [`nymeria_dataset_legacy`](https://github.com/facebookresearch/nymeria_dataset/tree/nymeria_dataset_legacy) branch, rather than the newer NymeriaPlus layout on the default branch. Clone and install that branch and its dependencies, including Project Aria Tools:
+
+```bash
+git clone --branch nymeria_dataset_legacy --single-branch https://github.com/facebookresearch/nymeria_dataset.git
+```
+
+Then point `NYMERIA_TOOLS_ROOT` to the cloned repository directory whose immediate child is the `nymeria/` Python package:
 
 ```text
 <PATH_TO_NYMERIA_TOOLS>/
@@ -178,18 +185,25 @@ print(len(sample["imu"]), len(sample["imu"][0]), sample["label"])
 
 The available configurations are `AnyMo-Bench-150-US`, `AnyMo-Bench-150-USCD`, `AnyMo-Bench-50-US`, and `AnyMo-Bench-50-USCD`. Refer to the [dataset card](https://huggingface.co/datasets/CRUISEResearchGroup/AnyMo-Bench) for split definitions and licensing.
 
-AnyMo-Bench provides the finalized activity labels used by the released pipeline. The internal label-generation, clustering, and LLM-adjudication workflow is not required to reproduce the AnyMo models or reported evaluations and is therefore not included in this repository.
 
 <a id="reproducing-anymo"></a>
 ## 🚀 Reproducing AnyMo
 
 ### 1. 📥 Nymeria Preparation
 
-Arrange the authorized Nymeria release under `ANYMO_DATA_ROOT`, set `NYMERIA_TOOLS_ROOT` as described above, then synchronize the signals, body motion, mesh, and narrations:
+Arrange the authorized legacy Nymeria release under `ANYMO_DATA_ROOT`. Each sequence directory must retain the official `<date>_<session_id>_<fake_name>_<act_id>_<uid>` identifier produced by the legacy download tools. Set `NYMERIA_TOOLS_ROOT` as described above, then synchronize the signals, body motion, mesh, and narrations:
 
 ```bash
 bash scripts/prepare_nymeria.sh
 ```
+
+Use [AnyMo Nymeria annotations](annotations/anymo_nymeria_annotations_v1.tar.gz) and extract them directly into the prepared Nymeria root:
+
+```bash
+tar -xzf <PATH_TO_ANYMO_NYMERIA_ANNOTATIONS> -C "${ANYMO_DATA_ROOT}"
+```
+
+The archive preserves the official sequence identifiers and places `anymo_annotations.csv` under each matching `<sequence_id>/multimodal_sync_60hz/` directory. Each row includes the synchronized 60 Hz frame interval, Nymeria global timestamps, original and augmented narrations, and AnyMo activity labels.
 
 ### 2. 🧭 Geometry-Aware IMU Simulation
 
@@ -285,7 +299,7 @@ Their records are excluded from synthetic representation pretraining, tokenizer 
 <a id="license-and-acknowledgements"></a>
 ## ⚖️ License
 
-AnyMo-specific code is released under the [MIT License](LICENSE). The bundled `code/ms-swift` and `code/WIMUSim` directories retain their original license and attribution files. AnyMo-Bench and source datasets are governed by their respective dataset licenses and access terms.
+AnyMo-specific code is released under the [MIT License](LICENSE). The bundled `code/ms-swift` and `code/WIMUSim` directories retain their original license and attribution files. The packaged AnyMo Nymeria annotations are derived from Nymeria and remain subject to the [Nymeria CC BY-NC 4.0 license](https://github.com/facebookresearch/nymeria_dataset/blob/nymeria_dataset_legacy/LICENSE). AnyMo-Bench and other source datasets are governed by their respective dataset licenses and access terms.
 
 <a id="contact"></a>
 ## 📩 Contact
