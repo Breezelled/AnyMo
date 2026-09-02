@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Environments and secrets
+.env
+.env.*
+.venv/
+venv/
+
+# Data, caches, and experiment outputs
+data/
+outputs/
+checkpoints/
+logs/
+.cache/
+wandb/
+*.pt
+*.pth
+*.ckpt
+*.npy
+*.npz
+*.zarr/
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/

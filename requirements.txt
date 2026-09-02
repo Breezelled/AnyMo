@@ -1,0 +1,40 @@
+# PyTorch is installed separately because the model and simulation stages use
+# different CUDA-compatible stacks. See README.md for the verified versions:
+#   model:      torch 2.10.0, torchvision 0.25.0, torchaudio 2.10.0,
+#               CUDA 12.8, flash-attn 2.8.3
+#   simulation: torch 2.0.1, torchvision 0.15.2, torchaudio 2.0.2,
+#               CUDA 11.7, pytorch3d 0.7.7
+
+# Core numerical and data stack (versions from the AnyMo reproduction environment)
+numpy==2.2.6
+pandas==2.3.3
+scipy==1.15.3
+scikit-learn==1.7.2
+pyarrow==23.0.1
+zarr==2.18.3
+numcodecs==0.13.1
+tqdm==4.67.3
+einops==0.8.2
+networkx==3.4.2
+PyYAML==6.0.3
+
+# Language-model training and datasets
+accelerate==1.13.0
+datasets==3.6.0
+huggingface-hub==1.11.0
+peft==0.18.1
+safetensors==0.7.0
+tokenizers==0.22.2
+transformers==5.2.0
+trl==0.29.1
+deepspeed==0.19.0
+
+# Evaluation
+bert-score==0.3.13
+matplotlib==3.10.8
+nltk==3.9.4
+rouge==1.0.1
+wandb
+
+# WIMUSim runtime (install PyTorch and PyTorch3D separately; see README)
+pybullet
