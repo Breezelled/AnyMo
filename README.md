@@ -14,6 +14,7 @@
 [![Paper](https://img.shields.io/badge/arXiv-2605.22715-b31b1b.svg)](https://arxiv.org/abs/2605.22715)
 [![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-8c1b13.svg)](https://neurips.cc/Conferences/2026)
 [![Project Page](https://img.shields.io/badge/Project-Page-4c8bf5.svg)](https://baiyuchen.com/project/AnyMo)
+[![AnyMo Model](https://img.shields.io/badge/%F0%9F%A4%97-AnyMo--Model-yellow.svg)](https://huggingface.co/CRUISEResearchGroup/AnyMo)
 [![AnyMo Bench](https://img.shields.io/badge/%F0%9F%A4%97-AnyMo--Bench-yellow.svg)](https://huggingface.co/datasets/CRUISEResearchGroup/AnyMo-Bench)
 [![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3100/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.10.0-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org/)
