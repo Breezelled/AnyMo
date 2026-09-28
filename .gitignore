@@ -25,6 +25,12 @@ wandb/
 *.npz
 *.zarr/
 
+# Hugging Face release tooling and model-repository sources
+/anymo/
+/model_card.md
+/pyproject.toml
+/scripts/export_huggingface.py
+
 # Editors and operating systems
 .DS_Store
 .idea/

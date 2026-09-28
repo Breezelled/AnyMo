@@ -12,6 +12,7 @@
 <sup>4</sup> The Hong Kong University of Science and Technology
 
 [![Paper](https://img.shields.io/badge/arXiv-2605.22715-b31b1b.svg)](https://arxiv.org/abs/2605.22715)
+[![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-8c1b13.svg)](https://neurips.cc/Conferences/2026)
 [![Project Page](https://img.shields.io/badge/Project-Page-4c8bf5.svg)](https://baiyuchen.com/project/AnyMo)
 [![AnyMo Bench](https://img.shields.io/badge/%F0%9F%A4%97-AnyMo--Bench-yellow.svg)](https://huggingface.co/datasets/CRUISEResearchGroup/AnyMo-Bench)
 [![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3100/)
@@ -27,6 +28,7 @@ AnyMo models wearable setup variation through body geometry. It simulates IMUs o
 - [Project Structure](#project-structure)
 - [Main Results](#main-results)
 - [Installation](#installation)
+- [Using the Released Model](#using-the-released-model)
 - [Paths and Runtime Configuration](#paths-and-runtime-configuration)
 - [AnyMo-Bench](#anymo-bench)
 - [Reproducing AnyMo](#reproducing-anymo)
@@ -133,6 +135,87 @@ Then point `NYMERIA_TOOLS_ROOT` to the cloned repository directory whose immedia
 ```
 
 The official tools are required only for the Nymeria synchronization in Step 1 and surface-candidate extraction at the start of Step 2. The later simulation, model training, corpus export, and evaluation stages operate on the prepared files and do not import the Nymeria package. Dataset access remains subject to each dataset's license and terms.
+
+<a id="using-the-released-model"></a>
+## 🤗 Using the Released Model
+
+The Hugging Face release packages the paper model as one repository while retaining its four named components:
+
+```text
+CRUISEResearchGroup/AnyMo/
+├── model.safetensors              AnyMo motion-language model
+├── anymo_encoder/                Geometry-aware ST-GCN encoder
+├── anymo_tokenizer/              Product-quantized motion tokenizer
+└── anymo_imu_codebook/            Standalone IMU codebook
+```
+
+`AnyMoPipeline` accepts raw acceleration and angular velocity, resamples them to 60 Hz, maps the named sensor locations to the 23-node graph, generates full-body IMU tokens, and exposes recognition, retrieval, and captioning interfaces:
+
+```python
+import numpy as np
+import torch
+from transformers import pipeline
+
+anymo = pipeline(
+    "anymo",
+    model="CRUISEResearchGroup/AnyMo",
+    trust_remote_code=True,
+    device=0,
+    dtype=torch.bfloat16,
+)
+
+# Shape: [time, sensors, channels] = [T, S, 6]. Channel order is
+# [acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z].
+imu = np.load("<PATH_TO_IMU_ARRAY>")
+locations = ["Head", "L_Forearm", "R_Forearm"]
+
+# Task 1: zero-shot human activity recognition
+recognition = anymo.classify(
+    imu,
+    sensor_locations=locations,
+    sampling_rate=60,
+    candidate_labels=["walking", "sitting", "running"],
+)
+
+# Task 2: cross-modal IMU-to-text retrieval
+candidate_texts = [
+    "A person is walking forward.",
+    "A person is sitting still.",
+    "A person is running.",
+]
+imu_embedding = anymo.encode_imu(imu, locations, sampling_rate=60)
+text_embeddings = anymo.encode_text(candidate_texts)
+similarities = imu_embedding @ text_embeddings.T
+retrieved_text = candidate_texts[similarities[0].argmax().item()]
+
+# Task 3: wearable IMU motion captioning
+caption = anymo.caption(imu, locations, sampling_rate=60)
+
+print(recognition)
+print(retrieved_text)
+print(caption)
+```
+
+The sensor axis and `sensor_locations` are positionally aligned: `imu[:, i, :]` must contain the signal from `sensor_locations[i]`. In the example above, sensor indices 0, 1, and 2 are the head, left forearm, and right forearm, respectively. Sensor locations may be provided in any order because the processor maps each named location to its canonical node in the 23-node body graph, but reordering the sensor axis requires applying the same reordering to `sensor_locations`. Multiple sensors cannot map to the same graph node.
+
+For batched input, use `imu` with shape `[B, T, S, 6]`. Supply either one shared list of `S` locations for the whole batch or a nested `[B][S]` list when samples use different setups. All samples in one batch must have the same length after resampling.
+
+Accelerometer values must be in `m/s²` and gyroscope values in `rad/s`. The processor resamples the temporal axis to 60 Hz; five-second windows (`T=300` at 60 Hz) reproduce the paper setting and are recommended for released-checkpoint inference. It does not otherwise crop or pad the input. Canonical locations follow the 23 segments used in the paper; common names such as `left wrist`, `right wrist`, `waist`, and `chest` are also accepted. `encode_imu` and `encode_text` return normalized embeddings. Their similarity matrix supports both IMU-to-text retrieval and text-to-IMU retrieval by ranking along the opposite matrix dimension.
+
+The standard Transformers interfaces are also available for the motion-language model and processor:
+
+```python
+from transformers import AutoModelForCausalLM, AutoProcessor
+
+processor = AutoProcessor.from_pretrained(
+    "CRUISEResearchGroup/AnyMo", trust_remote_code=True
+)
+model = AutoModelForCausalLM.from_pretrained(
+    "CRUISEResearchGroup/AnyMo",
+    trust_remote_code=True,
+    dtype=torch.bfloat16,
+)
+```
 
 <a id="paths-and-runtime-configuration"></a>
 ## ⚙️ Paths and Runtime Configuration
